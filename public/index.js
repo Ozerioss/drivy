@@ -85,35 +85,25 @@ var rentals = [
   }
 }];
 
-/*
-function timeComponent()
-{
-  var x,y;
-  var i =0;
-  for (var key in rentals[0])
-  {
-    rentals[key].pickupDate
-  }
-}*/
 
-
-
-//console.log("difference of dates", (returnDate2 - pickupDate2)+1);
 function makeMoney()
 {
   var days;
   var timeComponent = [];
+
   for(var i=0; i<rentals.length; i++)
   {
     var returnDate2 = new Date(rentals[i].returnDate);
     var pickupDate2 = new Date(rentals[i].pickupDate);
     var timeDiff = Math.abs(returnDate2.getTime() - pickupDate2.getTime());
     var diffDays = Math.ceil(timeDiff /(1000*3600*24));
-    days = diffDays + 1
+    days = diffDays + 1 // so that if the customer takes the car for one day it still counts as one full day
+
+    // These conditions are to test how long the rental is to determine the rebate
     if(days>1 && days< 4)
     {
     timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.1);
-  }
+    }
   else if(days>=4 && days< 11)
     {
     timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.3);
@@ -127,7 +117,6 @@ function makeMoney()
     timeComponent[i] = days * cars[i].pricePerDay;
   }
   
-
   var km;
   var distanceComponent = [];
     km = rentals[i].distance;
@@ -146,6 +135,75 @@ var roadsideAssist = 0;
     console.log("drivy : ", rentals[i].commission.drivy);
 
     console.log("rental price final :", rentals[i].price);
+  }
+  
+
+
+}
+
+
+
+function makeMoneyDeductible()
+{
+  var days;
+  var timeComponent = [];
+  
+  for(var i=0; i<rentals.length; i++)
+  {
+    var returnDate2 = new Date(rentals[i].returnDate);
+    var pickupDate2 = new Date(rentals[i].pickupDate);
+    var timeDiff = Math.abs(returnDate2.getTime() - pickupDate2.getTime());
+    var diffDays = Math.ceil(timeDiff /(1000*3600*24));
+    days = diffDays + 1 // so that if the customer takes the car for one day it still counts as one full day
+
+    // These conditions are to test how long the rental is to determine the rebate
+    if(days>1 && days< 4)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.1);
+    }
+  else if(days>=4 && days< 11)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.3);
+  }
+  else if(days > 10)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.5);
+  }
+  else 
+  {
+    timeComponent[i] = days * cars[i].pricePerDay;
+  }
+  
+    var km;
+    var distanceComponent = [];
+    km = rentals[i].distance;
+    distanceComponent[i] = km * cars[i].pricePerKm;
+    var commission = 0;
+    var roadsideAssist = 0;
+    rentals[i].price = timeComponent[i] + distanceComponent[i];
+    commission = rentals[i].price * 0.3;
+    rentals[i].commission.insurance = commission / 2;
+    rentals[i].commission.assistance = days;
+    rentals[i].commission.drivy = commission - (rentals[i].commission.insurance + rentals[i].commission.assistance);
+
+    console.log("comission : ", commission); 
+    console.log("roadsideAssist", rentals[i].commission.assistance);
+    console.log("insurance : ", rentals[i].commission.insurance);
+    console.log("drivy : ", rentals[i].commission.drivy);
+
+    console.log("rental price final :", rentals[i].price);
+
+if(rentals[i].options.deductibleReduction)
+{
+  rentals[i].price += 4 * days;
+  rentals[i].commission.drivy += 4* days;
+  console.log("Price with deductible reduction option : ", rentals[i].price);
+  console.log("Drivy with deductible reduction option : ", rentals[i].commission.drivy);
+}
+
+
+
+
   }
   
 
@@ -242,8 +300,8 @@ var rentalModifications = [{
 }];
 
 // Calling the function that does all the work
-makeMoney();
-
+//makeMoney();
+makeMoneyDeductible();
 console.log("cars", cars);
 console.log("rentals", rentals);
 console.log("actors", actors);
