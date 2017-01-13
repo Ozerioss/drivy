@@ -110,7 +110,6 @@ function makeMoney()
     var timeDiff = Math.abs(returnDate2.getTime() - pickupDate2.getTime());
     var diffDays = Math.ceil(timeDiff /(1000*3600*24));
     days = diffDays + 1
-    console.log("days", days);
     if(days>1 && days< 4)
     {
     timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.1);
@@ -127,31 +126,28 @@ function makeMoney()
   {
     timeComponent[i] = days * cars[i].pricePerDay;
   }
-
-    console.log("timeComponent", timeComponent[i]);
-  }
+  
 
   var km;
   var distanceComponent = [];
-  for(var i=0; i<rentals.length; i++)
-  {
     km = rentals[i].distance;
-    console.log("km", km);
     distanceComponent[i] = km * cars[i].pricePerKm;
-    console.log("distanceComponent", distanceComponent[i]);
-  }
-
 var commission = 0;
-  for(var i =0; i<rentals.length; i++)
-  {
+var roadsideAssist = 0;
     rentals[i].price = timeComponent[i] + distanceComponent[i];
-
     commission = rentals[i].price * 0.3;
     rentals[i].commission.insurance = commission / 2;
+    rentals[i].commission.assistance = days;
+    rentals[i].commission.drivy = commission - (rentals[i].commission.insurance + rentals[i].commission.assistance);
+
     console.log("comission : ", commission); 
+    console.log("roadsideAssist", rentals[i].commission.assistance);
     console.log("insurance : ", rentals[i].commission.insurance);
+    console.log("drivy : ", rentals[i].commission.drivy);
+
     console.log("rental price final :", rentals[i].price);
   }
+  
 
 
 }
