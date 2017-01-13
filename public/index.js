@@ -2,16 +2,19 @@
 
 //list of cars
 //useful for ALL exercises
-var cars = [{
+var cars = [
+{
   'id': 'p306',
   'vehicule': 'peugeot 306',
   'pricePerDay': 20,
   'pricePerKm': 0.10
-}, {
+}, 
+{
   'id': 'rr-sport',
   'pricePerDay': 60,
   'pricePerKm': 0.30
-}, {
+}, 
+{
   'id': 'p-boxster',
   'pricePerDay': 100,
   'pricePerKm': 0.45
@@ -22,7 +25,8 @@ var cars = [{
 //The `price` is updated from exercice 1
 //The `commission` is updated from exercice 3
 //The `options` is useful from exercice 4
-var rentals = [{
+var rentals = [
+{
   'id': '1-pb-92',
   'driver': {
     'firstName': 'Paul',
@@ -80,6 +84,53 @@ var rentals = [{
     'drivy': 0
   }
 }];
+
+/*
+function timeComponent()
+{
+  var x,y;
+  var i =0;
+  for (var key in rentals[0])
+  {
+    rentals[key].pickupDate
+  }
+}*/
+
+
+
+//console.log("difference of dates", (returnDate2 - pickupDate2)+1);
+
+  var days;
+  var timeComponent = [];
+  for(var i=0; i<rentals.length; i++)
+  {
+    var returnDate2 = new Date(rentals[i].returnDate);
+    var pickupDate2 = new Date(rentals[i].pickupDate);
+    var timeDiff = Math.abs(returnDate2.getTime() - pickupDate2.getTime());
+    var diffDays = Math.ceil(timeDiff /(1000*3600*24));
+    days = diffDays + 1
+    console.log("days", days);
+    timeComponent[i] = days * cars[i].pricePerDay;
+    console.log("timeComponent", timeComponent[i]);
+  }
+
+  var km;
+  var distanceComponent = [];
+  for(var i=0; i<rentals.length; i++)
+  {
+    km = rentals[i].distance;
+    console.log("km", km);
+    distanceComponent[i] = km * cars[i].pricePerKm;
+    console.log("distanceComponent", distanceComponent[i]);
+  }
+
+var rentalPrice = [];
+  for(var i =0; i<rentals.length; i++)
+  {
+    rentalPrice[i] = timeComponent[i] + distanceComponent[i];
+  }
+
+  console.log("rental price", rentalPrice.join(", "));
 
 //list of actors for payment
 //useful from exercise 5
@@ -165,7 +216,7 @@ var rentalModifications = [{
   'pickupDate': '2015-12-05'
 }];
 
-console.log(cars);
-console.log(rentals);
-console.log(actors);
-console.log(rentalModifications);
+console.log("cars", cars);
+console.log("rentals", rentals);
+console.log("actors", actors);
+console.log("rentalModifications", rentalModifications);
