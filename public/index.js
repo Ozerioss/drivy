@@ -99,7 +99,6 @@ function timeComponent()
 
 
 //console.log("difference of dates", (returnDate2 - pickupDate2)+1);
-
   var days;
   var timeComponent = [];
   for(var i=0; i<rentals.length; i++)
@@ -110,7 +109,23 @@ function timeComponent()
     var diffDays = Math.ceil(timeDiff /(1000*3600*24));
     days = diffDays + 1
     console.log("days", days);
+    if(days>1 && days< 4)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.1);
+  }
+  else if(days>=4 && days< 10)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.3);
+  }
+  else if(days > 10)
+    {
+    timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.5);
+  }
+  else 
+  {
     timeComponent[i] = days * cars[i].pricePerDay;
+  }
+
     console.log("timeComponent", timeComponent[i]);
   }
 
@@ -124,13 +139,16 @@ function timeComponent()
     console.log("distanceComponent", distanceComponent[i]);
   }
 
-var rentalPrice = [];
   for(var i =0; i<rentals.length; i++)
   {
-    rentalPrice[i] = timeComponent[i] + distanceComponent[i];
+    rentals[i].price = timeComponent[i] + distanceComponent[i];
+    console.log("rental price final :", rentals[i].price);
   }
 
-  console.log("rental price", rentalPrice.join(", "));
+
+
+  //console.log("rental price", rentalPrice.join(", "));
+
 
 //list of actors for payment
 //useful from exercise 5
