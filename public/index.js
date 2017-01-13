@@ -99,6 +99,8 @@ function timeComponent()
 
 
 //console.log("difference of dates", (returnDate2 - pickupDate2)+1);
+function makeMoney()
+{
   var days;
   var timeComponent = [];
   for(var i=0; i<rentals.length; i++)
@@ -113,7 +115,7 @@ function timeComponent()
     {
     timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.1);
   }
-  else if(days>=4 && days< 10)
+  else if(days>=4 && days< 11)
     {
     timeComponent[i] = days * (cars[i].pricePerDay - cars[i].pricePerDay * 0.3);
   }
@@ -139,11 +141,20 @@ function timeComponent()
     console.log("distanceComponent", distanceComponent[i]);
   }
 
+var commission = 0;
   for(var i =0; i<rentals.length; i++)
   {
     rentals[i].price = timeComponent[i] + distanceComponent[i];
+
+    commission = rentals[i].price * 0.3;
+    rentals[i].commission.insurance = commission / 2;
+    console.log("comission : ", commission); 
+    console.log("insurance : ", rentals[i].commission.insurance);
     console.log("rental price final :", rentals[i].price);
   }
+
+
+}
 
 
 
@@ -233,6 +244,9 @@ var rentalModifications = [{
   'rentalId': '3-sa-92',
   'pickupDate': '2015-12-05'
 }];
+
+// Calling the function that does all the work
+makeMoney();
 
 console.log("cars", cars);
 console.log("rentals", rentals);
