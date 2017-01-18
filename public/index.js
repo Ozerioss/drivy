@@ -154,9 +154,47 @@ function makeMoney()
     {
       rentals[i].price += 4 * days;
       rentals[i].commission.drivy += 4* days;
+      commission += 4*days;
       console.log("Price with deductible reduction option : ", rentals[i].price);
       console.log("Drivy with deductible reduction option : ", rentals[i].commission.drivy);
     }
+
+
+
+    //	Computing the debit and credit for all the parties involved 
+    for(var j =0; j < 5; j++)
+    {
+    	// The driver pays the rental price ( with the optional deductible reduction )
+		if(actors[i].payment[j].who == 'driver')
+		{
+			actors[i].payment[j].amount = rentals[i].price;
+		}
+
+		// The owner gets the rental price minus the commission
+    	if(actors[i].payment[j].who == 'owner')
+    	{
+    		actors[i].payment[j].amount = rentals[i].price - commission;
+		}
+
+
+		if(actors[i].payment[j].who == 'insurance')
+		{
+			actors[i].payment[j].amount = rentals[i].commission.insurance;
+		}
+
+		if(actors[i].payment[j].who =='assistance')
+		{
+			actors[i].payment[j].amount = rentals[i].commission.assistance;
+		}
+
+		if(actors[i].payment[j].who =='drivy')
+		{
+			actors[i].payment[j].amount = rentals[i].commission.drivy;
+		}
+
+
+	}
+	
 
   }
  
@@ -164,17 +202,21 @@ function makeMoney()
 
 //list of actors for payment
 //useful from exercise 5
-var actors = [{
+var actors = [
+{
   'rentalId': '1-pb-92',
-  'payment': [{
+  'payment': [
+  {
     'who': 'driver',
     'type': 'debit',
     'amount': 0
-  }, {
+  }, 
+  {
     'who': 'owner',
     'type': 'credit',
     'amount': 0
-  }, {
+  }, 
+  {
     'who': 'insurance',
     'type': 'credit',
     'amount': 0
@@ -187,7 +229,8 @@ var actors = [{
     'type': 'credit',
     'amount': 0
   }]
-}, {
+}, 
+{
   'rentalId': '2-rs-92',
   'payment': [{
     'who': 'driver',
